@@ -12,7 +12,7 @@ def input_file(file_name):
 
   return lines
 
-def has_duplicate(lexeme):
+def has_duplicate(lexeme, symbol_table):
   in_symbol_table = False
   for item in symbol_table:
     if item['lexeme'] == lexeme:
@@ -21,21 +21,24 @@ def has_duplicate(lexeme):
   return in_symbol_table
 
 
-def lexeme_match(symbol_table, i, lexeme, type):
-  word = rf"\b{lexeme}\b" # f: formatted string; r: regex pattern
-  if re.search(word, i):
-    in_symbol_table = has_duplicate(lexeme)
-    if not in_symbol_table:
-      symbol_table.append({ "lexeme": lexeme, "type": type })
-    
+def lexeme_match(symbol_table, regex_pattern, type, line):
+  lexeme = re.findall(regex_pattern, line)
+  if lexeme:
+    for i in lexeme:
+      if not has_duplicate(i, symbol_table):
+        symbol_table.append({ "lexeme": i, "type": type })
+
+
 lines = input_file('files/input.lol')
 keywords = input_file('files/keywords.txt') 
 symbol_table = []
 
-# print(keywords)
 for line in lines:
   for keyword in keywords:
-    lexeme_match(symbol_table, line, lexeme=rf"{keyword}", type="keyword")
+    lexeme_match(symbol_table, rf'\b{keyword}\b', "Keyword", line)
+
+  lexeme_match(symbol_table, r'(?<!\.)\b[0-9]+\b(?!\.)', "Integer", line)
+  lexeme_match(symbol_table, r'\b\d+?\.\d+\b', "Float", line)
 
 for symbol in symbol_table:
   print(symbol)
