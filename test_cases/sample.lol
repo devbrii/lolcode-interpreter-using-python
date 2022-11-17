@@ -1,4 +1,4 @@
-OBTW
+OBTW A BC
 This is a sample program in lolcode that computes for the age in years or months.
 TLDR
 
