@@ -29,8 +29,8 @@ def lexeme_match(symbol_table, regex_pattern, type, line):
         symbol_table.append({ "lexeme": i, "type": type })
 
 
-lines = input_file('files/input.lol')
-keywords = input_file('files/keywords.txt') 
+lines = input_file('test_cases/sample.lol')
+keywords = input_file('interpreter_files/keywords.txt') 
 symbol_table = []
 
 for line in lines:
