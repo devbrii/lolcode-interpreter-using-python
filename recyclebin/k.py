@@ -34,3 +34,16 @@
 # print()
 # print(pretty_table)
 
+# k = "\"a"
+
+# print(k[0] == "\"")
+import re
+
+line = "1 2 4.4"
+matches = re.findall(r'(?<!\.)\b[0-9]+\b(?!\.)', line) # returns a list of matches if there are multiple strings   
+print(matches)
+
+line = "1 2 4.4"
+matches = re.findall(r'\b\d+?\.\d+\b', line) # returns a list of matches if there are multiple strings   
+
+print(matches)

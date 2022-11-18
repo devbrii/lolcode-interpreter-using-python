@@ -40,7 +40,7 @@ updated_lines = []
 for line in lines:
     # splits the line per word
     line_split = line.split()
-
+    
     for keyword in all_keywords:
         keyword_split = keyword.split()
 		
