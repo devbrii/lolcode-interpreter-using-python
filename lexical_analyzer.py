@@ -26,6 +26,7 @@ def specific_keyword(keyword, line, symbol_table, lexeme_type):
 
 lines = input_file('test_cases/sample.lol')
 
+main_symbol_table = []
 symbol_table = []
 
 # sorted in descending order per length of string
@@ -35,6 +36,7 @@ all_keywords = [
     ["IM OUTTA YR", "Loop"],
     ["I HAS A", "Variable Declaration"],
     ["QUOSHUNT OF", "Division Operator"],
+    ["PRODUKT OF", "Multiplication Operator"],
     ["SMALLR OF", "Smaller Of"],
     ["BOTH SAEM", "Equal Operator"],
     ["DIFFRINT", "Not Equal Operator"],
@@ -165,6 +167,11 @@ for line in lines:
 
     print(f"AFTER: {line}")
 
+    main_symbol_table.append(symbol_table)
+
+
+print(main_symbol_table)
+
 # output file
 pretty_table = PrettyTable()
 pretty_table.field_names = ["Lexeme", "Type"]
@@ -174,9 +181,9 @@ if obtw_flag == 1:
     symbol_table = []
 
 
-for symbol in symbol_table:
-    print(symbol)
-    pretty_table.add_row([symbol['lexeme'], symbol['type']])
+# for symbol in symbol_table:
+#     print(symbol)
+#     pretty_table.add_row([symbol['lexeme'], symbol['type']])
 
-print(pretty_table)
-print(len(symbol_table))
+# print(pretty_table)
+# print((symbol_table))
