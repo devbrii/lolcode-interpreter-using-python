@@ -84,12 +84,25 @@ all_keywords = [
 
 obtw_flag = 0
 for line in lines:
-    for item in all_keywords:
-        line = specific_keyword(item[0], line, symbol_table, item[1])
-
     if "BTW" in line:  # remove all succeeding lines
         symbol_table.append({"lexeme": "BTW", "type": "Comment"})
-        line = line.replace(line, "", 1)
+
+        splitted_list = line.split()
+        index = splitted_list.index("BTW")
+        splitted_list = splitted_list[0:index] # remove all string starting from BTW to the end of the line
+        line = ' '.join([str(elem) for elem in splitted_list]) # convert back to string
+
+    # returns a list of matches if there are multiple strings
+    string_matches = re.findall(r'"(.+?)"', line)
+    for match in string_matches:
+        symbol_table.append(
+            {"lexeme": f"\"{match}\"", "type": "String Literal"})
+        line = line.replace(match, "", 1)
+
+    for item in all_keywords:
+        occurences = line.count(item[0])
+        for occurence in range(occurences):
+            line = specific_keyword(item[0], line, symbol_table, item[1])
 
     #     line_index = 0
     #     keyword_split = keyword.split()
@@ -133,13 +146,6 @@ for line in lines:
     # line_split = ' '.join(line_split)  # group into a string again per line
 
     # TODO: turn into function
-    # returns a list of matches if there are multiple strings
-    string_matches = re.findall(r'"(.+?)"', line)
-    for match in string_matches:
-        symbol_table.append(
-            {"lexeme": f"\"{match}\"", "type": "String Literal"})
-        line = line.replace(match, "", 1)
-
     # returns a list of matches if there are integers in each line
     int_matches = re.findall(r'(?<!\.)\b[0-9]+\b(?!\.)', line)
     for match in int_matches:
