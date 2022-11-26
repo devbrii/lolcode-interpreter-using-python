@@ -1,7 +1,3 @@
-
-
-
-
 HAI 1.2
   I HAS A choice
 
