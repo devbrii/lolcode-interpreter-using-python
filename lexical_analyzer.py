@@ -4,24 +4,26 @@ import os
 os.system('cls')
 
 # read file
-def input_file(file_name):
-    with open(file_name) as file_in:
-        lines = []
-        for line in file_in:
-            line = line.strip()  # removes \n
-            lines.append(line)
 
-    return lines
+
+def input_file(file_name):
+  with open(file_name) as file_in:
+    lines = []
+    for line in file_in:
+      line = line.strip()  # removes \n
+      lines.append(line)
+
+  return lines
 
 
 def specific_keyword(keyword_split, new_line, symbol_table, lexeme_type):
-    if keyword_split == new_line[0:len(keyword_split)]:
-        symbol_table.append({"lexeme": keyword, "type": lexeme_type})
-        # del line_split[line_index: line_index+len(keyword_split)]
-        # line = line.replace(keyword, "", 1)
-        new_line = new_line[len(keyword):]
+  if keyword_split == new_line[0:len(keyword_split)]:
+    symbol_table.append({"lexeme": keyword, "type": lexeme_type})
+    # del line_split[line_index: line_index+len(keyword_split)]
+    # line = line.replace(keyword, "", 1)
+    new_line = new_line[len(keyword):]
 
-    return new_line
+  return new_line
 
 
 all_table = []
@@ -85,100 +87,112 @@ all_keywords = [
 
 obtw_flag = 0
 for line in lines:
-    line_split = line.split()
-    lexemes_table = []
-    
-    while line_split != []:
-        # for BTW
-        try:
-            # print("LINE SPLIT: ", line_split)
-            index = line_split.index('BTW')
-            lexemes_table.append({"lexeme": "BTW", "type": "Single Line Comment"})
-            line_split = line_split[:index]
+  line_split = line.split()
+  lexemes_table = []
+
+  # while every line is not an empty list
+  while line_split:
+    #! OBTW
+    try:
+      if line_split.index('OBTW') == 0:
+        del line_split[0]
+        lexemes_table.append({"lexeme": "OBTW", "type": "Multiline Comment Start"})
+        obtw_flag = 1
+        continue
+    except:
+      pass
+
+    #! BTW
+    try:
+      if line_split.index('BTW') == 0:
+        index = 0
+        lexemes_table.append(
+            {"lexeme": "BTW", "type": "Single Line Comment"})
+        line_split = []
+        continue
+      # print("LINE SPLIT: ", line_split)
+    except:
+      pass
+
+    #! ALl Keywrods
+    continue_flag = 0
+    for keyword in all_keywords:
+      keyword_split = keyword[0].split()
+
+      if keyword_split == line_split[:len(keyword_split)]:
+        lexemes_table.append({"lexeme": keyword[0], "type": keyword[1]})
+
+        line_split = line_split[len(keyword_split):]
+        continue_flag = 1
+
+        break
+
+    if continue_flag == 1:
+        continue
+
+    # string literal
+    try:
+        if "\"" in line_split[0]:
+          line_split = ' '.join(line_split)  # group into a string again
+
+          string_matches = re.findall(r'"(.+?)"', line_split)
+          for match in string_matches:
+              lexemes_table.append({"lexeme": f"\"{match}\"", "type": "String Literal"})
+              line_split = line_split.replace(match, "")
+          line_split = line_split.split()
+          break
+    except:
+        pass
+
+    try:
+        if re.match(r'(?<!\.)\b[0-9]+\b(?!\.)', line_split[0]):
+            lexemes_table.append({"lexeme": line_split[0], "type": "Integer"})
+            del line_split[0]
             continue
-            # print("LINE SPLIT: ", line_split)
-        except:
-            pass
-        
-        continue_flag = 0
-        for keyword in all_keywords:
-            keyword_split = keyword[0].split()
+    except:
+        pass
 
-            if keyword_split == line_split[:len(keyword_split)]:
-                # print("PASS")
-                lexemes_table.append({"lexeme": keyword[0], "type": keyword[1]})
-
-                line_split = line_split[len(keyword_split):]
-                continue_flag = 1
-                
-                break
-
-        if continue_flag == 1:
+    try:
+        if re.findall(r'(\b\d+?\.\d+\b)', line_split[0]):
+            lexemes_table.append(
+                {"lexeme": line_split[0], "type": "Float"})
+            del line_split[0]
             continue
+    except:
+        pass
 
-        # string literal
-        try:
-            if "\"" in line_split[0]:
-                # re.match(r'(?<!\.)\b[0-9]+\b(?!\.)', line_split)
-                line_split = ' '.join(line_split)  # group into a string again
-            
-                string_matches = re.findall(r'"(.+?)"', line_split)
-                for match in string_matches:
-                    lexemes_table.append({"lexeme": f"\"{match}\"", "type": "String Literal"})
-                    line_split = line_split.replace(match, "")
-                line_split = line_split.split()
-                break
-        except:
-            pass
+    try:
+      if obtw_flag == 1:
+        if line_split[0] == "TLDR":
+          del line_split[0]
+          obtw_flag = 0
+          lexemes_table.append({"lexeme": "TLDR", "type": "Multiline Comment End"})
+        else:
+          line_split = []
+        continue
 
-        
-        try:
-            if re.match(r'(?<!\.)\b[0-9]+\b(?!\.)', line_split[0]):
-                lexemes_table.append({"lexeme": line_split[0], "type": "Integer"})
-                line_split = line_split[1:]
-                continue
-        except:
-            pass
+    except:
+      pass
 
-        try:
-            if re.findall(r'(\b\d+?\.\d+\b)', line_split[0]):
-                lexemes_table.append({"lexeme": line_split[0], "type": "Float"})
-                line_split = line_split[1:]
-                # continue
-        except:
-            pass
 
-        try:
-            lexemes_table.append({"lexeme": line_split[0], "type": "Variable Identifier"})
-            line_split = line_split[1:]
-            
-        except:
-            pass
+    try:
+        lexemes_table.append({"lexeme": line_split[0], "type": "Variable Identifier"})
+        del line_split[0]
+    except:
+        pass
 
-    all_table.append(lexemes_table)
+  all_table.append(lexemes_table)
 
-    # print(line)
 
 # output file
 pretty_table = PrettyTable()
 pretty_table.field_names = ["Lexeme", "Type"]
 
-#! at the end of a file, OBTW has no TLDR partner
-# if obtw_flag == 1:
-#     lexemes_table = []
-
-
-# for lexemes in lexemes_table:
-    # pretty_table.add_row([lexemes['lexeme'], lexemes['type']])
-
-# print(pretty_table)
-# print(len(lexemes_table))
-
-
 for line in all_table:
-    print(line)
     for lexeme in line:
         pretty_table.add_row([lexeme['lexeme'], lexeme['type']])
 
 print(pretty_table)
-print(len(lexemes_table))
+
+# for line in all_table:
+#   print(line)

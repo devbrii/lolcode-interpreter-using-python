@@ -51,6 +51,7 @@ def expression(line):
                 return False
         loop_index += 1
     if operands - 1 == operators:
+        print("Yehey")
         return True
     else:
         print("Missing Operand")
