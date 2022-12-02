@@ -192,7 +192,7 @@ for line in all_table:
     for lexeme in line:
         pretty_table.add_row([lexeme['lexeme'], lexeme['type']])
 
-print(pretty_table)
+# print(pretty_table)
 
 # for line in all_table:
 #   print(line)

@@ -1,6 +1,6 @@
 HAI 1.2
-	I HAS A num1
-	I HAS A num2
+	I HAS A num1 ITZ 12
+	I HAS A num1 ITZ k
 
 	num1 R 15
 

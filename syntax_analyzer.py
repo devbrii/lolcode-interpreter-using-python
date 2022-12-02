@@ -1,8 +1,8 @@
 from lexical_analyzer import *
 
 
-def typecast():
-  pass
+# def typecast():
+#   if line
 
 #! VARIABLE DECLARATION
 def expression():
@@ -63,16 +63,37 @@ def expression():
         print("Missing Operand")
         return False
 
-def variable_declaration1():
+def variable_declaration1(line):
   try:
-    if line[0]['lexeme'] == "I HAS A" and line[1]['type'] == "Variable Identifier" and line[2]['lexeme'] == "ITZ" and line[3]['lexeme'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
+    if line[0]['lexeme'] == "I HAS A" and line[1]['type'] == "Variable Identifier" and line[2]['lexeme'] == "ITZ" and line[3]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
       return True
   except:
     pass
 
   return False
 
-def variable_declaration2():
+def variable_declaration1_error(line):
+  try:
+    if line[0]['lexeme'] == "I HAS A" and line[1]['type'] == "Variable Identifier" and line[2]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
+      print("Syntax Error: Missing \"ITZ Keyword\"")
+      return True
+  except:
+    pass
+
+  return False
+
+def variable_declaration1_error2(line):
+  try:
+    if line[0]['lexeme'] == "I HAS A" and line[1]['type'] == "Variable Identifier" and line[2]['lexeme'] == "ITZ":
+      print("Syntax Error: Missing literal, variable, or expression")
+      return True
+  except:
+    pass
+
+  return False
+
+
+def variable_declaration2(line):
   try:
     if line[0]['lexeme'] == "I HAS A" and line[1]['type'] == "Variable Identifier":
       return True
@@ -81,7 +102,7 @@ def variable_declaration2():
 
   return False
 
-def variable_declaration_error():
+def variable_declaration_error(line):
   try:
     if line[0]['lexeme'] == "I HAS A":
       print("Syntax Error: Missing variable identifier")
@@ -93,7 +114,7 @@ def variable_declaration_error():
 
 
 #! VARIABLE INITIALIZATION 
-def variable_initialize():
+def variable_initialize(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['lexeme'] == "R" and line[2]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
       return True
@@ -102,7 +123,7 @@ def variable_initialize():
 
   return False
 
-def variable_initialize_error1():
+def variable_initialize_error1(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
       print("Syntax Error: Missing 'R' keyword")
@@ -112,7 +133,7 @@ def variable_initialize_error1():
 
   return False
 
-def variable_initialize_error2():
+def variable_initialize_error2(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['lexeme'] == "R":
       return True
@@ -122,7 +143,7 @@ def variable_initialize_error2():
   return False
 
 #! USER INPUT
-def user_input():
+def user_input(line):
   try:
     if line[0]['lexeme'] == "GIMMEH" and line[1]['type'] == "Variable Identifier":
       return True
@@ -131,7 +152,7 @@ def user_input():
 
   return False
 
-def user_input_error():
+def user_input_error(line):
   try:
     if line[0]['lexeme'] == "GIMMEH":
       print("Syntax Error: Missing variable identifier")
@@ -141,22 +162,24 @@ def user_input_error():
 
   return False
 
-def statements():
+def statements(line):
   #! VARIABLE DECLARATION
-  if variable_declaration1(): return True
-  if variable_declaration2(): return True
-  if variable_declaration_error(): return False # will not continue to the loop and will cause error
+  if variable_declaration1(line): return True
+  if variable_declaration1_error(line): return False
+  if variable_declaration1_error2(line): return False
+  if variable_declaration2(line): return True
+  if variable_declaration_error(line): return False # will not continue to the loop and will cause error
 
   #! VARIABLE INITIALIZATION  
-  if variable_initialize(): return True
-  if variable_initialize_error1(): return False
-  if variable_initialize_error2():
+  if variable_initialize(line): return True
+  if variable_initialize_error1(line): return False
+  if variable_initialize_error2(line):
     print("Syntax Error: Missing literal, variable, or expression")
     return False
 
   #! USER INPUT
-  if user_input(): return True
-  if user_input_error(): return False
+  if user_input(line): return True
+  if user_input_error(line): return False
 
 
 
@@ -164,6 +187,7 @@ arithmetic_operations = ["SUM OF", "DIFF OF", "PRODUKT OF", "QUOSHUNT OF" ,"MOD 
 hai_flag = False
 bye_flag = False
 error_flag = False
+cannot_proceed = False
 
 line_index = 0
 for line in all_table:
@@ -184,20 +208,25 @@ for line in all_table:
     lexeme_index += 1
 
   # show errors
-  if statements() == False:
+  if statements(line) == False:
     error_flag = True
     break
   
-  if statements() == True:
+  if statements(line) == True:
     continue
   
 
-  # line_index += 1
-
-
 if error_flag == False and not (hai_flag and bye_flag):
   print("Syntax Error: Missing HAI or KTHXBYE")
+  cannot_proceed = True
+
+if error_flag == True:
+  cannot_proceed = True
 
 print("Line", line_index)
 
     # pretty_table.add_row([lexeme['lexeme'], lexeme['type']])
+
+# for line in all_table:
+#   # if variable_declaration1(line):
+#   print(line)
