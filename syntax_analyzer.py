@@ -1,18 +1,39 @@
 from lexical_analyzer import *
 
 
-# def typecast():
-#   if line
+def loop(line):
+  pass
+
+
+def typecast(line):
+  if len(line) < 4:
+    print("Syntax Error: Missing an operand.")
+    return False
+  
+  if line[1]["type"] not in ["Float", "Integer", "Variable Identifier", "Boolean", "True Value", "False Value", "Untyped Data Type"]:
+    print("Syntax Error: Expecting a literal")
+    return False
+  else:
+    if line[2]["lexeme"] != "A":
+      print("Syntax Error: ")
+      return False
+    else:
+      if line[3]["lexeme"] not in ["NUMBR", "TROOF", "NUMBAR"]:
+        print("Expecting a valid data type to typecast")
+        return False
+
+  return Tru
+      
 
 #! VARIABLE DECLARATION
-def expression():
+def expression(line):
     lexeme_index = len(line)
     loop_index = 0
     operators = 0
     operands = 0
 
-    if line[0]['lexeme'] == "maek":
-      return typecast()
+    if line[0]['lexeme'] == "MAEK":
+      return typecast(line)
 
     while loop_index < lexeme_index:
         print(loop_index)
@@ -113,8 +134,8 @@ def variable_declaration_error(line):
   return False
 
 
-#! VARIABLE INITIALIZATION 
-def variable_initialize(line):
+#! VARIABLE ASSIGNMENT
+def variable_assignment(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['lexeme'] == "R" and line[2]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
       return True
@@ -123,7 +144,7 @@ def variable_initialize(line):
 
   return False
 
-def variable_initialize_error1(line):
+def variable_assignment_error1(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
       print("Syntax Error: Missing 'R' keyword")
@@ -133,7 +154,7 @@ def variable_initialize_error1(line):
 
   return False
 
-def variable_initialize_error2(line):
+def variable_assignment_error2(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['lexeme'] == "R":
       return True
@@ -164,22 +185,28 @@ def user_input_error(line):
 
 def statements(line):
   #! VARIABLE DECLARATION
-  if variable_declaration1(line): return True
-  if variable_declaration1_error(line): return False
-  if variable_declaration1_error2(line): return False
-  if variable_declaration2(line): return True
-  if variable_declaration_error(line): return False # will not continue to the loop and will cause error
+  # if len(line) >0:
+  #   if line[0] in arithmetic_operations+["MAEK", "SMOOSH"]:
+  #     if expression(line): return True
+  #     elif not expression(line): return False
+  #   if line[0] == "IM":
+  #     print() 
+    if variable_declaration1(line): return True
+    if variable_declaration1_error(line): return False
+    if variable_declaration1_error2(line): return False
+    if variable_declaration2(line): return True
+    if variable_declaration_error(line): return False
 
-  #! VARIABLE INITIALIZATION  
-  if variable_initialize(line): return True
-  if variable_initialize_error1(line): return False
-  if variable_initialize_error2(line):
-    print("Syntax Error: Missing literal, variable, or expression")
-    return False
+    #! VARIABLE INITIALIZATION  
+    if variable_assignment(line): return True
+    if variable_assignment_error1(line): return False
+    if variable_assignment_error2(line):
+      print("Syntax Error: Missing literal, variable, or expression")
+      return False
 
-  #! USER INPUT
-  if user_input(line): return True
-  if user_input_error(line): return False
+    #! USER INPUT
+    if user_input(line): return True
+    if user_input_error(line): return False
 
 
 

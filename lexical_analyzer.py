@@ -66,6 +66,7 @@ all_keywords = [
     ["NUMBR", "Integer Type"],
     ["TROOF", "Boolean Type"],
     ["MAEK", "Typecast"],
+    ["MKAY", "Mkay Keyword"],
     ["WTF?", "Switch Start"],
     ["WILE", "Loop Execution Continues If True"],
     ["GTFO", "Break Statement"],

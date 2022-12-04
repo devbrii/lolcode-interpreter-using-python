@@ -3,49 +3,83 @@ from syntax_analyzer import *
 print(pretty_table)
 symbol_table = []
 
-
-def find_duplicate(lexeme_type, duplicate, lexeme_type2):
-  try:
-    if lexeme_type == duplicate:
-      item['value'] = lexeme_type2
-      return True
-  except:
-    pass
-
-  return False
-
-has_duplicate = False
 #! will not proceed to semantic analyzer if there are errors from the syntax analyzer
 if not cannot_proceed:
   for line in all_table:
     #! VARIABLE DECLARATION
     if variable_declaration1(line):
-      if line[3]['type'] in ["Integer", "Float", "Variable Identifier", "String Literal"]:
-        for item in symbol_table:
-          has_duplicate = find_duplicate(line[1]['lexeme'], item['identifier'], line[3]['lexeme'])
-        if not has_duplicate:
-          symbol_table.append({ 'identifier': line[1]['lexeme'], 'value': line[3]['lexeme'] })
+      has_duplicate = False
+      for item in symbol_table:
+        try:
+          if line[1]['lexeme'] == item['identifier']:
+            has_duplicate = True
+            item['value'] = line[3]['lexeme']
+            break
+        except:
+          pass
+      if not has_duplicate:
+        symbol_table.append({ 'identifier': line[1]['lexeme'], 'value': line[3]['lexeme'] })
       continue
     
     if variable_declaration2(line):
-      print(line)
+      has_duplicate = False
       for item in symbol_table:
-        has_duplicate = find_duplicate(line[1]['lexeme'], item['identifier'], "Untyped")
+        try:
+          if line[1]['lexeme'] == item['identifier']:
+            has_duplicate = True
+            item['value'] = "Untyped"
+            break
+        except:
+          pass
+
       if not has_duplicate:
         symbol_table.append({ 'identifier': line[1]['lexeme'], 'value': "Untyped" })
       continue
 
+
     #! VARIABLE INITIALIZATION  
-    # if variable_initialize(line): return True
+    if variable_assignment(line):
+      has_duplicate = False
+      for item in symbol_table:
+        try:
+          if line[0]['lexeme'] == item['identifier']:
+            has_duplicate = True
+            break
+        except:
+          pass
 
+      if has_duplicate == True:
+        item['value'] = line[2]['lexeme']
+        continue
+      else:
+        print(f"Error: Variable is not yet defined.")
+        break
+        
+    #! USER INPUT
+    if user_input(line):
+      variable = input("")
 
-    # #! USER INPUT
-    # if user_input(line): return True
-    # if user_input_error(line): return False
+      has_duplicate = False
+      for item in symbol_table:
+        try:
+          if line[1]['lexeme'] == item['identifier']:
+            has_duplicate = True
+            break
+        except:
+          pass
+      
+      if has_duplicate == True:
+        item['value'] = variable
+        continue
+      else:
+        print(f"Error: Variable is not yet defined.")
+        break
+
 
 pretty_table_semantic = PrettyTable()
 pretty_table_semantic.field_names = ["Identifier", "Value"]
 
+print("SYMBOL TABLE")
 for line in symbol_table:  
   pretty_table_semantic.add_row([line['identifier'], line['value']])
 
