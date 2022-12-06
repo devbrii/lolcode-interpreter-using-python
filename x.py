@@ -57,6 +57,12 @@ def expression(line):
         print("Missing Operand")
         return False
 
+def declaration(line):
+    if line[1]['lexemes'] != "ITZ":
+        return False
+    
+    if line[2]['type'] in ['Float', 'Integer', '']
+
 
 line1 = [{'lexeme': 'answer', 'type': 'Variable Identifier'}, {'lexeme': 'R', 'type': 'R Keyword'}, {'lexeme': 'DIFF OF', 'type': 'Subtraction Operator'}, {'lexeme': 'x', 'type': 'Variable Identifier'}, {'lexeme': 'AN', 'type': 'And Operator'}, {'lexeme': 'y', 'type': 'Variable Identifier'}]
 

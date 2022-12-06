@@ -22,9 +22,8 @@ def typecast(line):
         print("Expecting a valid data type to typecast")
         return False
 
-  return Tru
+  return True
       
-
 #! VARIABLE DECLARATION
 def expression(line):
     lexeme_index = len(line)
@@ -157,6 +156,7 @@ def variable_assignment_error1(line):
 def variable_assignment_error2(line):
   try:
     if line[0]['type'] == "Variable Identifier" and line[1]['lexeme'] == "R":
+      print("Syntax Error: Missing literal, variable, or expression")
       return True
   except:
     pass
@@ -200,9 +200,7 @@ def statements(line):
     #! VARIABLE INITIALIZATION  
     if variable_assignment(line): return True
     if variable_assignment_error1(line): return False
-    if variable_assignment_error2(line):
-      print("Syntax Error: Missing literal, variable, or expression")
-      return False
+    if variable_assignment_error2(line): return False
 
     #! USER INPUT
     if user_input(line): return True
