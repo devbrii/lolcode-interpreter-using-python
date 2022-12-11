@@ -4,8 +4,6 @@ import os
 os.system('cls')
 
 # read file
-
-
 def input_file(file_name):
   with open(file_name) as file_in:
     lines = []
@@ -28,7 +26,7 @@ def specific_keyword(keyword_split, new_line, symbol_table, lexeme_type):
 
 all_table = []
 
-lines = input_file('test_cases/sample.lol')
+lines = input_file('test_cases/io.lol')
 
 # sorted in descending order per length of string
 # Why? when keyword is "YR" and first line is "IM IN YR LOOP", it will remove "YR" in the list
@@ -93,7 +91,7 @@ for line in lines:
 
   # while every line is not an empty list
   while line_split:
-    print(line_split)
+    # print(line_split)
     #! OBTW
     try:
       if line_split.index('OBTW') == 0:

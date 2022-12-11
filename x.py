@@ -1,12 +1,11 @@
-arithmetic_operations = ["SUM OF", "DIFF OF", "PRODUKT OF",
-                         "QUOSHUNT OF", "MOD OF", "BIGGR OF", "SMALLR OF"]
-
-
 def expression(line):
     lexeme_index = len(line)
     loop_index = 0
     operators = 0
     operands = 0
+
+    if line[0]['lexeme'] == "MAEK":
+      return typecast(line)
 
     while loop_index < lexeme_index:
         print(loop_index)
@@ -51,36 +50,8 @@ def expression(line):
                 return False
         loop_index += 1
     if operands - 1 == operators:
-        print("Yehey")
+        print("YEHEY")
         return True
     else:
         print("Missing Operand")
         return False
-
-def declaration(line):
-    if len(line) >2:
-        if line[1]['type'] != "Variable Identifier":
-            return False
-        return True
-
-def assignment(line):
-    if declaration(line):
-        if len(line) != 2:
-            if len(line) == 
-            if line[2]['lexemes'] == "ITZ":    
-                if line[2]['type'] not in ['Float', 'Integer', 'True value', 'False Value', 'String Literal']:
-                    return False
-            elif line[1]['type'] in ['Float', 'Integer', 'True value', 'False Value', 'String Literal']:
-                return True
-            else:
-                return False
-        else:
-            return True
-    
-
-
-
-line1 = [{'lexeme': 'answer', 'type': 'Variable Identifier'}, {'lexeme': 'R', 'type': 'R Keyword'}, {'lexeme': 'DIFF OF', 'type': 'Subtraction Operator'}, {'lexeme': 'x', 'type': 'Variable Identifier'}, {'lexeme': 'AN', 'type': 'And Operator'}, {'lexeme': 'y', 'type': 'Variable Identifier'}]
-
-    
-expression(line1)
