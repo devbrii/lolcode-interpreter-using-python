@@ -8,7 +8,7 @@ HAI 1.2
 
 	VISIBLE "y: "
 	GIMMEH y
-
+	
 	answer R SUM OF x AN y
 	VISIBLE x "+" y " is " answer
 

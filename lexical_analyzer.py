@@ -87,8 +87,6 @@ all_keywords = [
 ]
 
 obtw_flag = 0
-string_flag = 0
-
 for line in lines:
   line_split = line.split()
   lexemes_table = []
@@ -136,37 +134,17 @@ for line in lines:
 
     # string literal
     try:
-        if "\"" == line_split[0][0]:
-          lexemes_table.append({"lexeme": "\"", "type": "String Delimiter"})
-          del line_split[0]
-          string_flag = 1
-          # print("LINE 0 0", line_split[0][0])
-          # line_split = ' '.join(line_split)  # group into a string again
+        if "\"" in line_split[0]:
+          line_split = ' '.join(line_split)  # group into a string again
 
-          # string_matches = re.findall(r'"(.+?)"', line_split)
-          # for match in string_matches:
-          #     lexemes_table.append({"lexeme": f"\"{match}\"", "type": "String Literal"})
-          #     line_split = line_split.replace(match, "")
-          # line_split = line_split.split()
+          string_matches = re.findall(r'"(.+?)"', line_split)
+          for match in string_matches:
+              lexemes_table.append({"lexeme": f"\"{match}\"", "type": "String Literal"})
+              line_split = line_split.replace(match, "")
+          line_split = line_split.split()
           break
     except:
         pass
-
-    string_literal = ""
-    while string_flag == 1:
-      # lexemes_table.append({"lexeme": "\"", "type": "String Delimiter"})
-      try:
-        if line_split[0][-1] == "\"":
-          lexemes_table.append({"lexeme": string_literal, "type": "String Literal"})
-          lexemes_table.append({"lexeme": "\"", "type": "String Delimiter"})
-        else:
-          string_literal = string_literal.join(line_split[0])  # group into a string again
-        del line_split[0]
-      except:
-        pass
-
-
-
 
     try:
         if re.match(r'(?<!\.)\b[0-9]+\b(?!\.)', line_split[0]):
@@ -226,7 +204,7 @@ for line in all_table:
     for lexeme in line:
         pretty_table.add_row([lexeme['lexeme'], lexeme['type']])
 
-print(pretty_table)
+# print(pretty_table)
 
 # for line in all_table:
 #   print(line)
